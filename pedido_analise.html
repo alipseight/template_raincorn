@@ -1,0 +1,243 @@
+<div id="main"><div id="main-content"><div id="main-content">
+
+<style>
+input {
+height: 18px;
+}
+.submit-buttons{
+float: left;
+}
+  /* Tooltip for permission roles */
+#tooltip {
+   padding:0;
+   max-width: 50% !important;
+   color: #000;
+   border:1px solid #a0bbf7;
+   background-color: #f6f6f6;
+}
+
+* html #tooltip {
+   width: 30%;
+}
+
+#tooltip *
+{
+   margin:2px 5px 2px 8px;
+}
+#tooltip ul {
+   padding: 0px 0px 0px 20px;
+}
+#tooltip dl {
+   clear:both;
+   position:relative;
+   margin-bottom: 10px;
+}
+#tooltip dt {
+   float:left;
+   border: medium none;
+   padding-top: 3px;
+   width: 50%;
+}
+#tooltip dd {
+   margin-left: 50%;
+   padding-left: 5px;
+   vertical-align: top;
+}
+#tooltip p.header {
+   margin:0;
+   font-size:13px;
+   color:#ffffff;
+   padding: 1px 5px;
+   background: #a0bbf7 repeat;
+   font-weight: bold;
+   border:1px solid #a0bbf7;
+}
+
+#tooltip p {
+   padding: 0px 5px 0px 0px;
+   color: #666666;
+}
+</style>
+
+<script src="http://forum-script.googlecode.com/files/VarGET.js"></script>
+<script src="http://illiweb.com/rsc/60/frm/admin/admin.js"></script>
+<script>
+    html_tpl = "<b>Nome do fórum:</b> $1 <br><br><b>Endereço do fórum:</b> $2<br><br><b>Data de criação do fórum:</b> $3 <br><br><b>O fórum já foi avaliado anteriormente? Se já, quando?</b> $4 <br><b>Permitir comentários em análise?</b> $6<br><br><br><br><b>Comentários adicionais:</b> $5<br><br>";
+    bbcode_tpl = "[b]Nome do fórum:[/b] $1 \n\n[b]Endereço do fórum:[/b] $2 \n\n[b]Data de criação do fórum:[/b] $3\n\n[b]O fórum já foi avaliado anteriormente? Se já, quando?[/b] $4\n\n[b]Permitir comentários em análise?:[/b] $6\n\n[b]Comentários adicionais:[/b] $5";
+    $(document).ready(function(){
+       $('#bt-apagar').click(function() {
+          $('#form-submit input[type="text"],#form-submit textarea').val('');
+          $('input[name="f"]').val($(this).val());
+       });
+       $('#bt-pr-questao').click(function() {
+          tpl = html_tpl;
+          tpl = tpl.replace("$1", $('#tituloforum').val());
+          tpl = tpl.replace("$2", $('#endereco').val());
+          tpl = tpl.replace("$3", $('#idade').val());
+          tpl = tpl.replace("$4", $('#avaliacao').val());
+        tpl = tpl.replace("$6", $('#comments_member').val());
+          tpl = tpl.replace("$5", $('#comentario').val());
+          $('html, body').animate({
+             scrollTop: $("#pr-questao").offset().top
+          }, 800);
+          $('#pr-questao').slideDown(300);
+          $('#html-questao').html(tpl);
+       });
+       $('#bt-enviar').click(function() {
+          tpl = bbcode_tpl;
+          if($('#tituloforum').val()!=='' && $('#endereco').val()!=='' && $('#avaliacao').val()!=='' && $('#comments_member').val()!=='' && $('#idade').val()!=='' && $('#comentario').val()!==''){
+             tpl = tpl.replace("$1", $('#tituloforum').val());
+             tpl = tpl.replace("$2", $('#endereco').val());
+             tpl = tpl.replace("$3", $('#idade').val());
+             tpl = tpl.replace("$4", $('#avaliacao').val());
+          tpl = tpl.replace("$6", $('#comments_member').val());
+             tpl = tpl.replace("$5", $('#comentario').val());
+             $('input[name="message"]').val(tpl);
+             $('input[name="subject"]').val($('#tituloforum').val());
+             $('#bt-enviar-e').click();
+             $('#form-submit').slideUp(300);
+             $('#enviado').slideDown(800);
+          }else{
+             $('#erro').slideUp(1);
+             $('#erro').slideDown(800);
+          }
+       });
+       $('#bt-pr-fechar').click(function() {
+          $('html, body').animate({
+             scrollTop: $("#pr-questao").offset().top
+          }, 800);
+          $('#pr-questao').slideUp(300);
+          return false;
+       });
+       $('#tituloforum').click(function() {
+          if($('#tituloforum').val()=='Coloque aqui um título descritivo sobre a sua questão'){
+             $('#tituloforum').val('');
+          }
+       });
+       jQuery('#tituloforum').keyup(function(){
+          var t=document.getElementById('tituloforum').value.length;
+          var i=document.getElementById('identifytitle');
+          if(t<10&&t>0){
+             var l=t-10;i.innerHTML='O nome do fórum necessita mais '+l*-1+' caracteres'
+          }
+          else{
+             i.innerHTML=''
+          }
+       });
+       var e='#endereco';
+       var v='#validardominio'
+       jQuery(e).after(' <div id=validardominio style=display:inline></div>')
+       jQuery(e).keyup(function(){
+          var u=jQuery(e).val();
+          m=/^(https?:\/\/)?(www\.)?([a-zA-Z0-9_\-]+)+\.([a-zA-Z]{2,4})(?:\.([a-zA-Z]{2,4}))?\/?(.*)$/;
+          if(u.match(m)){jQuery(v).html('')}else{jQuery(v).html('Esse domínio não é válido')};
+       });
+       if(VarGET('f')!==''){
+          $('#form-part2, #bts').slideDown(800);
+          $('input[name="f"]').val(VarGET('f'));
+          $('#bt-selecciona-forum').val(VarGET('f'));
+       }
+    });
+    </script>
+   
+<form action="/post" method="post" id="form-submit">
+    <div id="erro" style="display:none;" class="panel">
+      <div class="inner">
+         <span class="corners-top"></span>
+         <center><span class="conteudo_texto" style="color:#C00"><b>Você deve preencher todos os campos</b></span></center>
+         <span class="corners-bottom"></span>
+      </div>
+   </div>
+<br>
+    <div style="display:none;" id="pr-questao" class="post row2">
+      <div class="inner">
+         <span class="corners-top"></span>
+            <div class="postbody">
+               <div class="h3">Pré-visualizar [<a id="bt-pr-fechar" href="#">Fechar o modo de pré-visualização</a>]</div>
+               <div id="html-questao" class="content"></div>
+            </div>
+         <span class="corners-bottom"></span>
+      </div>
+   </div>
+<hr style="display:none;" id="pr-questao">
+<br>
+   <div class="panel">
+      <div class="inner">
+         <span class="corners-top"></span>  
+            <div class="h3" style="margin-top: 7px;">Antes de pedir uma análise, o fórum deve:</div>
+            <br>
+            <p>Ter pelo menos 30 membros registrados, 500 mensagens, 5 fóruns e tema minimamente personalizado, além de três meses de existência.<br>
+            Pertencer ao serviço Forumeiros e estar de acordo com as Condições de usuário Forumeiros;<br>
+            Ser um fórum com atividade;<br>
+            Ser um fórum de língua portuguesa.<br><br>    
+            Se uma avaliação já foi feita, somente <b>poderá pedir outra após três meses</b>, para que uma mudança seja perceptível.</p>
+      </div>
+         <span class="corners-bottom"></span>
+   </div>
+<br> 
+     <div class="panel" id="form-part2">
+      <div class="inner">
+         <span class="corners-top"></span>
+            <div class="h3" style="margin-top: 7px;">Formulário de análise</div>   
+            <br>   
+               <fieldset class="fields1">
+               <dl><dt><label>Nome do fórum:</label></dt>
+                  <dd><input type="text" id="tituloforum" class="inputbox" style="clear: both; width: 510px;"> 
+                  <div id="identifytitle" style="display:inline"></div>
+                  </dd></dl>
+               <dl><dt><label>Endereço do fórum:</label></dt>
+                  <dd><input type="text" id="endereco" class="inputbox" style="clear: both; width: 510px;"> <div id="validardominio" style="display:inline"></div>
+                  </dd></dl>
+               <dl><dt><label>Data de criação do fórum:</label></dt>
+                  <dd><input type="text" id="idade" class="inputbox" style="clear: both; width:74px;line-height: 18px;padding-left: 4px;" maxlength="10">
+                  <div style="display: inline;">DD/MM/AAAA</div>
+                  </dd></dl>
+               <dl><dt><label>Foi avaliado anteriormente? Se sim, quando?</label></dt>
+                  <dd><input type="text" id="avaliacao" class="inputbox" style="clear: both; width:510px;line-height: 18px;">
+                  </dd></dl>
+            <dl><dt>
+            <label><img src="http://illiweb.com/fa/admin/icones/question2.png" onmouseover="show_tooltip(this,'Ao selecionar Sim, você permite que membros do fórum comente a análise sobre seu fórum. Ao pré-visualizar o formulário, você deve fechá-lo para que o valor do campo seja alterado na pré-visualização!','Informações do campo:');" align="absmiddle" title=""> Permitir comentários</label></dt><dd>
+               <select id="comments_member">
+                  <option value="Não">Não</option>
+                  <option value="Sim">Sim</option>
+            </select></dd></dl><hr>
+               <dl><dt><label>Comentários adicionais:</label></dt>
+                  <dd><textarea id="comentario" class="inputbox" tabindex="14" style="clear: both; height: 100px; width:510px;"></textarea>
+                  </dd></dl>   
+               </fieldset>
+         <input type="hidden" name="subject" onblur="shh()">
+         <input type="hidden" name="message">
+         <input type="hidden" name="mode" value="newtopic">
+         <input type="hidden" name="f" value="7">
+         <input type="hidden" name="lt" value="0">    
+         <span class="corners-bottom"></span>
+      </div>
+   </div>
+<br>
+    <div id="bts" style="" class="panel">
+      <div class="inner">
+         <span class="corners-top"></span>
+         <fieldset class="submit-buttons">
+            <input id="bt-pr-questao" value="Pré-visualizar" type="button" class="button1"> 
+            <input id="bt-enviar" value="Enviar questão" type="button" class="button1" name="post"> 
+            <input id="bt-apagar" value="Apagar tudo" type="button" class="button1">
+            <input id="bt-enviar-e" value="Enviar Questão" type="submit" class="button1" style="display:none;" name="post">
+         </fieldset>
+         <span class="corners-bottom"></span>
+      </div>
+   </div>
+</form>
+
+<br>
+    <div id="enviado" style="display:none;" class="panel">
+      <div class="inner">
+         <span class="corners-top"></span>
+         <center>
+         <img src="http://illiweb.com/fa/admin/wait_preview.gif" alt="carregando" title="enviando...">
+         <br>
+         <span class="conteudo_texto">enviando...</span>
+         </center>
+         <span class="corners-bottom"></span>
+      </div>
+   </div>
+</div></div></div>

@@ -1,0 +1,87 @@
+<div id="main"><div id="main-content"><script>jQuery(document).ready(function(){jQuery('#imagemtutorial img').click(function(){jQuery('#imagemtutorial img').removeClass('imgselected');jQuery(this).addClass('imgselected');m=jQuery(this).attr('src');jQuery('#imgtutorialform').val(m)});
+
+jQuery('#imgtutorialform').keyup(function(){imgcampo=jQuery(this).val();if(jQuery('#imagemtutorial img[src="'+imgcampo+'"]').length){jQuery('#imagemtutorial img[src="'+imgcampo+'"]').click()}else{jQuery('#imagemtutorial img').removeClass('imgselected')}});
+
+jQuery('#titulo').keyup(function(){if(jQuery(this).val().toLowerCase().indexOf('[tutorial]')!=-1){jQuery('#tipo').val('Tutoriais, dicas e astúcias')}else if(jQuery(this).val().toLowerCase().indexOf('[faq]')!=-1){jQuery('#tipo').val('Perguntas e respostas frequentes')}});
+
+jQuery('#adpasso').click(function(){var clicktitulo="if(this.value=='Título')this.value=''";var blurtitulo="if(this.value=='')this.value='Título'";var clickdescricao="if(this.value=='Descrição')this.value=''";var blurdescricao="if(this.value=='')this.value='Descrição'";var n=new Number(jQuery('#numdepassos').val())+1;jQuery('#adpasso').closest('dl').before('<dl id="passo"><dt><label>'+n+'º -</label></dt><dd><input id="titulopasso" class="inputbox" style="clear:both;width:510px;color:darkblue;font-weight:bold" value="Título" onclick="'+clicktitulo+'" onblur="'+blurtitulo+'"><br><br><textarea id="descricaopasso" class="inputbox" style="clear:both;height:100px;width:627px" onclick="'+clickdescricao+'" onblur="'+blurdescricao+'">Descrição</textarea></dd></dl>');jQuery('#numdepassos').val(new Number(jQuery('#numdepassos').val())+1)});
+
+jQuery('#adpergunta').click(function(){var clickpergunta="if(this.value=='Pergunta')this.value=''";var clickresposta="if(this.value=='Resposta')this.value=''";var blurpergunta="if(this.value=='')this.value='Pergunta'";var blurresposta="if(this.value=='')this.value='Resposta'";jQuery(this).closest('dl').replaceWith('<dl id="pergunta"><dd><input id="titulopergunta" class="inputbox" style="clear:both;width:510px;color:darkblue;font-weight:bold" value="Pergunta" onclick="'+clickpergunta+'" onblur="'+blurpergunta+'"><br><input id="tituloresposta" class="inputbox" style="clear:both;width:510px;margin-top: 8px;" value="Resposta" onclick="'+clickresposta+'" onblur="'+blurresposta+'"></dd></dl><dl><dd><input type="button" value="Adicionar pergunta" id="adicionarpergunta" class="button2"><input type="button" value="Remover pergunta" id="repergunta" class="button2"></dd></dl>');
+
+jQuery('#adicionarpergunta').click(function(){var clickpergunta="if(this.value=='Pergunta')this.value=''";var clickresposta="if(this.value=='Resposta')this.value=''";var blurpergunta="if(this.value=='')this.value='Pergunta'";var blurresposta="if(this.value=='')this.value='Resposta'";jQuery('#adicionarpergunta').closest('dl').before('<dl id="pergunta" style="border-top:1px solid white;padding-top:7px"><dd><input id="titulopergunta" class="inputbox" style="clear:both;width:510px;color:darkblue;font-weight:bold" value="Pergunta" onclick="'+clickpergunta+'" onblur="'+blurpergunta+'"><br><input id="tituloresposta" class="inputbox" style="clear:both;width:510px;margin-top: 8px;" value="Resposta" onclick="'+clickresposta+'" onblur="'+blurresposta+'"></dd></dl>')});
+
+jQuery('#repergunta').click(function(){jQuery(this).closest('fieldset').find('dl#pergunta').eq(-1).remove();});});
+
+jQuery('#repasso').click(function(){if(jQuery('#numdepassos').val()>1){jQuery('#numdepassos').val(new Number(jQuery('#numdepassos').val())-1);jQuery(this).closest('fieldset').find('dl#passo').eq(-1).remove()};});
+
+jQuery('#gerarcodigotutorial').click(function(){jQuery('#divresultadopainel').slideDown();passos='';jQuery('#adpasso').closest('fieldset').find('#passo').each(function(n){titulo=jQuery(this).find('#titulopasso').val();descricao=jQuery(this).find('#descricaopasso').val();numero=n+1;passos+='[b][size=18]'+numero+'º[/size] - [color=darkblue]'+titulo+'[/color][/b]\n'+descricao+'\n\n\n'});
+
+var aviso='';
+if(jQuery('#aviso').length){var aviso='[table][tr][td][img]http://forumeiros.com/i/img/act_bottom.png[/img][/td][td]'+jQuery('#aviso').val()+'[/td][/tr][/table]'};
+
+var perguntas='';jQuery('#adicionarpergunta').closest('fieldset').find('#pergunta').each(function(){pergunta=jQuery(this).find('#titulopergunta').val();resposta=jQuery(this).find('#tituloresposta').val();perguntas+='[h2]Perguntas & Respostas[/h2]\n[list][*][b][color=indigo]'+pergunta+'?[/color][/b]\n'+resposta+'[/list]\n\n'});if(perguntas!=''){perguntas=perguntas+'\n'};
+
+a='[center][table style="margin:auto"][tr][td]\n[img]'+jQuery('#imgtutorialform').val()+'[/img] [/td][td]\n[size=24][color=#369FCF]'+jQuery('#titulo').val()+'[/color][/size][/td][/tr][/table][/center]\n\n[h2]Introdução[/h2]\n'+jQuery('#descricao').val()+'\n\n'+aviso+'\n[center][h3][color=#84C754][size=16]-->'+jQuery('#tipo').val()+' <--[/color][/size][/h3][/center]\n[center][color=#E9553C][b]'+jQuery('#titulo').val()+'[/b] [/color][/center]\n\n\n'+passos+perguntas+'[hr]\n[hr][size=18][center]© Fórum dos Fóruns[/center][/size]\n\n[table style="width: 100%; border: 2px solid #369FCF;  border-radius: 3px; margin-top: 30px;  background-color: #F0FAFF;"][tr][td][img]http://i39.servimg.com/u/f39/16/63/75/54/questi11.png[/img] [/td][td]Se tiver alguma dúvida relacionada com este tópico crie um tópico com o seguinte título:[b]'+jQuery('#titulo').val()+'[/b][/td][/tr][/table]';
+jQuery('#resultadopainel').val(a)});
+});
+    </script>
+
+<style>.imgselected{background-color: white;
+-webkit-box-shadow: 0px 0px 6px rgba(50, 50, 50, 0.75);
+-moz-box-shadow: 0px 0px 6px rgba(50, 50, 50, 0.75);
+box-shadow: 0px 0px 6px rgba(50, 50, 50, 0.75);
+}#imagemtutorial img{cursor:pointer}</style>
+<div id="mudarforum"><form action="/post" method="post" enctype="multipart/form-data">
+<div id="none" class="panel">
+    <div class="inner">
+            <span class="corners-top"><span></span></span>
+        <div class="h3" style="margin-top: 7px;">FORMULÁRIO DE ESTRUTURA DO TUTORIAL</div>
+          
+
+    <fieldset class="fields1">
+
+    <dl><dt>
+     <label>Imagem:</label><br><b style="
+    color: gray;
+">carregue sobre uma imagem para selecioná-la</b></dt>
+     <dd><input id="imgtutorialform" class="inputbox" style="clear: both; width: 510px;" value="http://i66.servimg.com/u/f66/15/86/37/09/alerte10.png"><div id="imagemtutorial" style="
+    width: 100%;  
+    height: auto;    
+    overflow-x: auto;
+display:inline-block;    
+"><div style="
+    float: left;  
+    margin-right: -30000px;  
+padding-left: 10px;
+padding-right: 10px;
+"><img src="http://i66.servimg.com/u/f66/15/86/37/09/alerte10.png" alt="" class="imgselected" style="display:inline;"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/censur10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/chatbo10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/config10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/ecrire10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/galeri10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/gestio10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/gestio11.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/groupe10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/html10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/images10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/index_10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/index_11.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/index_12.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/jeux10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/logo10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/new_ic10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/newsle10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/permis10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/portai10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/rang10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/reglem10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/ssss10.png" alt="" class="" style="display:inline"> <img src="http://i66.servimg.com/u/f66/15/86/37/09/statis10.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/domain.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/pub.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/stockage.png" alt="" class="" style="display:inline"><img src="http://i66.servimg.com/u/f66/15/86/37/09/suppor10.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/footer_nocopyrights.png" alt="" class="" style="display:inline"><img src="http://i23.servimg.com/u/f23/12/73/11/63/servic10.png" alt="" class="" style="display:inline"><img src="http://i23.servimg.com/u/f23/12/73/11/63/miniba10.png" alt="" class="" style="display:inline"><img src="http://i23.servimg.com/u/f23/12/73/11/63/botone10.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/fdf/marteau.png" alt="" class="" style="display:inline"><img src="http://i76.servimg.com/u/f76/11/66/91/15/sug1013.png" alt="" class="" style="display:inline"><img src="http://i76.servimg.com/u/f76/11/66/91/15/sug1012.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/warning_arrow.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/alerte1.png" alt="" class="" style="display:inline"><img src="http://www.illiweb.com/bl/index_users.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/templates.png" alt="" class="" style="display:inline"><img src="http://i40.servimg.com/u/f40/12/30/19/49/jeux10.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/fdf/voix.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/fdf/questions.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/forumactif_smartphone.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/warning.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/stop.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/1.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/2.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/3.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/4.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/p_strength/pwd_bad.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/p_strength/pwd_middle.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/p_strength/pwd_good.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/wait_preview.gif" alt="" class="" style="display:inline"><img src="http://illiweb.com/bl/warning.gif" alt="" class="" style="display:inline"><img src="http://illiweb.com/bl/error.gif" alt="" class="" style="display:inline"><img src="http://illiweb.com/bl/confirm.gif" alt="" class="" style="display:inline"><img src="http://www.criarumblog.com/rsc/img/logo_blog.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/admin/icones/big_ico/avatars.png" alt="" class="" style="display:inline"><img src="http://i44.servimg.com/u/f44/11/14/55/92/sug310.png" alt="" class="" style="display:inline"><img src="http://i44.servimg.com/u/f44/11/14/55/92/sug110.png" alt="" class="" style="display:inline"><img src="http://i44.servimg.com/u/f44/11/14/55/92/sug210.png" alt="" class="" style="display:inline"><img src="http://i44.servimg.com/u/f44/11/14/55/92/sug10.png" alt="" class="" style="display:inline"><img src="http://i22.servimg.com/u/f22/09/02/12/09/tumbli10.png" alt="" class="" style="display:inline"><img src="http://i22.servimg.com/u/f22/09/02/12/09/cardga10.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/fdf3/icones_fdf/private4.png" alt="" class="" style="display:inline"><img src="http://i32.servimg.com/u/f32/11/22/70/40/review10.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/optimisation_fdf/common/annonce.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/optimisation_fdf/common/medaille.gif" alt="" class="" style="display:inline"><img src="http://i42.servimg.com/u/f42/11/32/95/02/autres10.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/optimisation_fdf/common/ecrire2.png" alt="" class="" style="display:inline"><img src="http://illiweb.com/fa/optimisation_fdf/common/ecrire3.png" alt="" class="" style="display:inline"></div></div>
+    </dd></dl>
+
+<dl><dt>
+     <label>Título:</label></dt>
+     <dd><input id="titulo" class="inputbox" style="clear: both; width: 510px;">
+    </dd></dl>
+
+<dl><dt>
+     <label>Descrição:</label></dt>
+     <dd><textarea id="descricao" class="inputbox" style="clear: both; height: 100px; width:510px;"></textarea>
+    </dd></dl>
+
+<dl><dd><input type="button" value="Adicionar aviso" class="button2" onclick="if(jQuery(this).val()=='Adicionar aviso'){jQuery(this).closest('dl').before('<dl id=avisotexto><dt><label><img src=http://forumeiros.com/i/img/act_bottom.png></label></dt><dd><textarea id=aviso class=inputbox style=clear:both;height:67px;width:510px;margin-top:0px;margin-bottom:0px></textarea></dd></dl>');jQuery(this).val('Remover aviso')}else if(jQuery(this).val()=='Remover aviso'){jQuery('#avisotexto').remove();jQuery(this).val('Adicionar aviso')};return false"></dd></dl>
+<hr>
+<input type="hidden" id="numdepassos" value="1">
+<dl id="passo"><dt><label>1º -</label></dt><dd><input id="titulopasso" class="inputbox" style="clear:both;width:510px;color:darkblue;font-weight:bold" value="Título" onclick="if(this.value=='Título')this.value=''" onblur="if(this.value=='')this.value='Título'"><br><br><textarea id="descricaopasso" class="inputbox" style="clear:both;height:100px;width:627px" onclick="if(this.value=='Descrição')this.value=''" onblur="if(this.value=='')this.value='Descrição'">Descrição</textarea></dd></dl>
+
+<dl>
+     <dd><input type="button" value="Adicionar passo" id="adpasso" class="button2"><input type="button" value="Remover passo" id="repasso" class="button2">
+    </dd></dl><br><dl>
+     <dd><input type="button" value="Adicionar pergunta/resposta" id="adpergunta" class="button2">
+    </dd></dl>
+    </fieldset>
+        <br>
+<br><div id="divresultadopainel" style="display:none;padding:5px;background-color:white;border:1px solid #EEE;width:99%;cursor:normal"><a id="copy-description-fade" style="display: none; ">Conteúdo copiado</a><textarea id="resultadopainel" style="font-size: 15px; margin-left: 0px; margin-right: 0px; width: 99%; margin-top: 0px; margin-bottom: 0px; height: 136px; "></textarea></div><br><div style="
+    text-align: center;
+"><input type="button" value="Gerar código do tutorial" id="gerarcodigotutorial" class="button2"><input id="tipo" value="Tutoriais, dicas e astúcias" style="display:none"></div><br>
+
+    </div></div></form>
+	</div></div></div>
